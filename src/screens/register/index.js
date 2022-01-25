@@ -17,8 +17,11 @@ import NameIcon from '../../icons/name';
 import ArrowRightIcon from '../../icons/arrow_right';
 import PasswordIcon from '../../icons/password';
 import PersonIcon from '../../icons/person';
-import Logo from '../../images/logo.png';
 import ArrowBackIcon from '../../icons/arrow_back';
+import VisibleIcon from '../../icons/visible';
+import VisibleOffIcon from '../../icons/visible_off';
+
+import Logo from '../../images/logo.png';
 
 const RegisterScreen = (props) => {
     const emailRef = useRef(null);
@@ -55,7 +58,7 @@ const RegisterScreen = (props) => {
 
     const onContinue = () => {
         if (emailEntry.length == 0) {
-            setEmailErr("Lütfen email veya telefon numarası giriniz.");
+            setEmailErr("Lütfen email giriniz.");
             return;
         }
 
@@ -63,6 +66,39 @@ const RegisterScreen = (props) => {
             setEmailErr("Lütfen geçerli bir email giriniz.");
             return;
         }
+
+        setEmailErr("");
+
+        if (fullnameEntry.length < 3) {
+            setFullnameErr("Lütfen geçerli bir isim giriniz.");
+            return;
+        }
+
+        setFullnameErr("");
+
+        if (passwordEntry.length < 3 || passwordEntry.length > 20) {
+            setPasswordErr("Şifrenizin uzunluğu minimum 6, maksimum 20 olabilir.");
+            return;
+        }
+
+        setPasswordErr("");
+
+        if (passwordEntry != password2Entry) {
+            setPassword2Err("Bu şifreler eşleşmiyor.");
+            return;
+        }
+
+        setPassword2Err("");
+
+        if (tcEntry.length != 11) {
+            setTcErr("Girdiğiniz T.C. Kimlik numarası geçerli değildir.");
+            return;
+        }
+
+        setTcErr("");
+
+        props.navigation.navigate("ConfirmScreen", { type: "REGISTER" });
+        console.log("navigate");
     }
 
     useEffect(() => {
@@ -291,6 +327,10 @@ const RegisterScreen = (props) => {
                                     maxLength={32}
                                     secureTextEntry={!passwordVisible}
                                 />
+                                <TouchableOpacity style={{ height: "100%", justifyContent: "center", paddingLeft: 8 }} onPress={() => setPasswordVisible(!passwordVisible)}>
+                                    {passwordVisible ? <VisibleOffIcon width={24} height={24} fill="#C0C0C0" style={{ height: "100%", marginRight: 10 }} /> :
+                                        <VisibleIcon width={24} height={24} fill="#C0C0C0" style={{ height: "100%", marginRight: 10 }} />}
+                                </TouchableOpacity>
                             </View>
                         </View>
                         <LinearGradient style={styles.border} colors={['#EC0000', '#D49900']} start={{ x: 0, y: 1 }} end={{ x: 1, y: -1 }} useAngle={true} angle={45} angleCenter={{ x: 0.5, y: 0.5 }} />
@@ -314,6 +354,10 @@ const RegisterScreen = (props) => {
                                     maxLength={32}
                                     secureTextEntry={!passwordVisible}
                                 />
+                                <TouchableOpacity style={{ height: "100%", justifyContent: "center", paddingLeft: 8 }} onPress={() => setPasswordVisible(!passwordVisible)}>
+                                    {passwordVisible ? <VisibleOffIcon width={24} height={24} fill="#C0C0C0" style={{ height: "100%", marginRight: 10 }} /> :
+                                        <VisibleIcon width={24} height={24} fill="#C0C0C0" style={{ height: "100%", marginRight: 10 }} />}
+                                </TouchableOpacity>
                             </View>
                         </View>
                         <LinearGradient style={styles.border} colors={['#EC0000', '#D49900']} start={{ x: 0, y: 1 }} end={{ x: 1, y: -1 }} useAngle={true} angle={45} angleCenter={{ x: 0.5, y: 0.5 }} />
@@ -334,7 +378,8 @@ const RegisterScreen = (props) => {
                                     ref={tcRef}
                                     onFocus={() => setTcFocus(true)}
                                     onBlur={() => setTcFocus(false)}
-                                    maxLength={32}
+                                    maxLength={11}
+                                    keyboardType="number-pad"
                                 />
                             </View>
                         </View>

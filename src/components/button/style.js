@@ -5,7 +5,7 @@ export default StyleSheet.create({
         height: 52,
         width: "100%",
         borderRadius: 14,
-        elevation: 12
+        elevation: 12,
     },
     content: {
         flex: 1,

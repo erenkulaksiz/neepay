@@ -40,6 +40,8 @@ const LoginScreen = (props) => {
             setErr("Lütfen geçerli bir email giriniz.");
             return;
         }
+
+        props.navigation.navigate("ConfirmScreen", { type: "LOGIN" });
     }
 
     useEffect(() => {

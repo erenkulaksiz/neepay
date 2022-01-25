@@ -14,6 +14,8 @@ import store from './store';
 import LandingScreen from './screens/landing';
 import LoginScreen from './screens/login';
 import RegisterScreen from './screens/register';
+import ConfirmScreen from './screens/confirm';
+import RootScreen from './screens/root';
 
 const persistor = persistStore(store);
 const Stack = createStackNavigator();
@@ -32,14 +34,14 @@ const App = (props) => {
             <PersistGate loading={null} persistor={persistor}>
                 <NavigationContainer ref={navigationRef}>
                     <Stack.Navigator
-                        initialRouteName="Landing"
+                        initialRouteName="RootScreen"
                         screenOptions={{
                             ...TransitionPresets.SlideFromRightIOS,
                             headerShown: false,
                             gestureEnabled: true,
                         }}>
                         <Stack.Screen
-                            name="Landing"
+                            name="LandingScreen"
                             component={LandingScreen}
                         />
                         <Stack.Screen
@@ -49,6 +51,14 @@ const App = (props) => {
                         <Stack.Screen
                             name="RegisterScreen"
                             component={RegisterScreen}
+                        />
+                        <Stack.Screen
+                            name="ConfirmScreen"
+                            component={ConfirmScreen}
+                        />
+                        <Stack.Screen
+                            name="RootScreen"
+                            component={RootScreen}
                         />
                     </Stack.Navigator>
                 </NavigationContainer>
