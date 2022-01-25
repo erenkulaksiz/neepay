@@ -141,9 +141,10 @@ const HomeScreen = (props) => {
                 onSwipeComplete={() => setModalVisible(false)}
                 animationIn="slideInLeft"
                 animationOut="slideOutLeft"
-                swipeDirection="left"
+                swipeDirection={["left"]}
                 useNativeDriver
                 propagateSwipe
+                onBackButtonPress={() => setModalVisible(false)}
                 style={styles2.sideMenuStyle}>
                 <View style={{ flex: 1, backgroundColor: "white", paddingLeft: 24, paddingRight: 24, paddingTop: 24, }}>
                     <TouchableOpacity style={{ width: "100%", alignItems: "flex-end" }} onPress={() => setModalVisible(false)}>
@@ -153,13 +154,16 @@ const HomeScreen = (props) => {
                         text="Bildirimler"
                         icon={<NotificationsIcon width={24} height={24} fill="#fff" />}
                         style={{ marginBottom: 24, marginTop: 24, overflow: "visible" }}
-                        onPress={() => onContinue()}
+                        onPress={() => { }}
                     />
                     <Button
                         text="İletişim"
                         icon={<InfoIcon width={24} height={24} fill="#fff" />}
                         style={{ marginBottom: 48, overflow: "visible" }}
-                        onPress={() => onContinue()}
+                        onPress={() => {
+                            setModalVisible(false);
+                            props.navigation.navigate("ContactScreen");
+                        }}
                     />
                 </View>
             </Modal>

@@ -16,6 +16,7 @@ import LoginScreen from './screens/login';
 import RegisterScreen from './screens/register';
 import ConfirmScreen from './screens/confirm';
 import RootScreen from './screens/root';
+import ContactScreen from './screens/contact';
 
 const persistor = persistStore(store);
 const Stack = createStackNavigator();
@@ -59,6 +60,10 @@ const App = (props) => {
                         <Stack.Screen
                             name="RootScreen"
                             component={RootScreen}
+                        />
+                        <Stack.Screen
+                            name="ContactScreen"
+                            component={ContactScreen}
                         />
                     </Stack.Navigator>
                 </NavigationContainer>
