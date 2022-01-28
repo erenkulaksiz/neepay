@@ -17,6 +17,9 @@ import RegisterScreen from './screens/register';
 import ConfirmScreen from './screens/confirm';
 import RootScreen from './screens/root';
 import ContactScreen from './screens/contact';
+import SendScreen from './screens/send';
+import SuccessScreen from './screens/success';
+import QRMakeScreen from './screens/qrmake';
 
 const persistor = persistStore(store);
 const Stack = createStackNavigator();
@@ -64,6 +67,24 @@ const App = (props) => {
                         <Stack.Screen
                             name="ContactScreen"
                             component={ContactScreen}
+                        />
+                        <Stack.Screen
+                            name="SendScreen"
+                            component={SendScreen}
+                        />
+                        <Stack.Screen
+                            name="Success"
+                            component={SuccessScreen}
+                            options={{
+                                gestureEnabled: false,
+                            }}
+                        />
+                        <Stack.Screen
+                            name="QRMakeScreen"
+                            component={QRMakeScreen}
+                            options={{
+                                gestureEnabled: false,
+                            }}
                         />
                     </Stack.Navigator>
                 </NavigationContainer>

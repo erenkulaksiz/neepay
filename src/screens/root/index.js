@@ -10,9 +10,12 @@ import HomeOutlineIcon from '../../icons/home_outline';
 
 import QRIcon from '../../icons/qr';
 import TransferIcon from '../../icons/transfer';
-
+import CloseIcon from '../../icons/close';
+import PaymentsIcon from '../../icons/payments';
 import NotificationsIcon from '../../icons/notifications';
 import InfoIcon from '../../icons/info';
+import PhoneIcon from '../../icons/phone';
+
 import HomeScreen from '../../screens/home';
 import QRScreen from '../../screens/qr';
 
@@ -102,23 +105,37 @@ const RootScreen = (props) => {
                     animationOut="slideOutDown"
                     swipeDirection="down"
                     useNativeDriver={true}
-                    style={{ flex: 1, justifyContent: "flex-end", margin: 0 }}
+                    style={{ flex: 1, justifyContent: "flex-end", margin: 0, }}
                 >
-                    <View style={{ height: "30%", width: "100%", backgroundColor: "white", paddingLeft: 24, paddingRight: 24, paddingTop: 24, }}>
+                    <View style={{ width: "100%", backgroundColor: "white", paddingLeft: 24, paddingRight: 24, paddingTop: 24, borderTopRightRadius: 12, borderTopLeftRadius: 12 }}>
+                        <View style={{ width: "100%", height: 32, alignItems: "flex-end", marginBottom: 16 }}>
+                            <TouchableOpacity onPress={() => setTransferModalVisible(false)} style={{ width: 32, height: 32, backgroundColor: "#C4C4C4", borderRadius: 120, justifyContent: "center", alignItems: "center" }}>
+                                <CloseIcon width={24} height={24} fill={"#000"} />
+                            </TouchableOpacity>
+                        </View>
                         <Button
-                            text="Bildirimler"
-                            icon={<NotificationsIcon width={24} height={24} fill="#fff" />}
-                            style={{ marginBottom: 24, marginTop: 12, overflow: "visible" }}
-                            onPress={() => { }}
+                            text="Neepay Müşteri Numarası İle Gönder"
+                            icon={<PaymentsIcon width={24} height={24} fill="#fff" />}
+                            style={{ marginBottom: 12, overflow: "visible" }}
+                            onPress={() => {
+                                setTransferModalVisible(false);
+                                props.navigation.navigate("SendScreen", { type: "NO" });
+                            }}
                         />
                         <Button
-                            text="İletişim"
-                            icon={<InfoIcon width={24} height={24} fill="#fff" />}
-                            style={{ marginBottom: 24, overflow: "visible" }}
+                            text="Telefon No İle Gönder"
+                            icon={<PhoneIcon width={24} height={24} fill="#fff" />}
+                            style={{ marginBottom: 12, overflow: "visible" }}
                             onPress={() => {
-                                setModalVisible(false);
-                                props.navigation.navigate("ContactScreen");
+                                setTransferModalVisible(false);
+                                props.navigation.navigate("SendScreen", { type: "TEL" });
                             }}
+                        />
+                        <Button
+                            text="QR Code"
+                            icon={<QRIcon width={24} height={24} fill="#fff" />}
+                            style={{ marginBottom: 24, overflow: "visible" }}
+                            onPress={() => { }}
                         />
                     </View>
                 </Modal>
