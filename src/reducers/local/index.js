@@ -1,15 +1,15 @@
 
 const INITIAL_STATE = {
-    loggedIn: {}
+    anon_token: "",
 };
 
 export default (state = INITIAL_STATE, action) => {
     switch (action.type) {
-        case 'SET_LOCAL_LOGGED_IN':
+        case 'SET_LOCAL_TOKEN':
 
-            console.log("SET_LOGGED_IN: ", action.payload)
+            console.log("SET_LOCAL_TOKEN: ", action.payload)
 
-            state.loggedIn = action.payload;
+            state.anon_token = action.payload;
 
             return {
                 ...state

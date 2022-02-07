@@ -3,6 +3,7 @@ import { Text, View, TouchableOpacity, Image, TextInput, KeyboardAvoidingView, S
 import { connect } from 'react-redux';
 import LinearGradient from 'react-native-linear-gradient';
 import Modal from 'react-native-modal';
+import Clipboard from '@react-native-community/clipboard';
 
 // Styles
 import styles from './style';
@@ -76,7 +77,10 @@ const HomeScreen = (props) => {
                         <Text style={{ color: "#848484", fontSize: 14 }}>Neepay Numarası</Text>
                     </View>
                     <View style={{ flex: 70, flexDirection: "row", justifyContent: "flex-end", alignItems: "flex-start" }}>
-                        <TouchableOpacity style={{ flexDirection: "row", alignItems: "center" }}>
+                        <TouchableOpacity style={{ flexDirection: "row", alignItems: "center" }} onPress={() => {
+                            Clipboard.setString(`${1234567890}`);
+                            alert("Neepay Müşteri Numarası panoya kopyalandı!");
+                        }}>
                             <Text style={{ color: "#0094FF", fontSize: 16 }}>1234567890</Text>
                             <LinkIcon width={18} height={18} fill={"#0094FF"} style={{ marginLeft: 4 }} />
                         </TouchableOpacity>

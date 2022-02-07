@@ -135,7 +135,10 @@ const RootScreen = (props) => {
                             text="QR Code"
                             icon={<QRIcon width={24} height={24} fill="#fff" />}
                             style={{ marginBottom: 24, overflow: "visible" }}
-                            onPress={() => { }}
+                            onPress={() => {
+                                setTransferModalVisible(false);
+                                props.navigation.navigate("QRMakeScreen", { type: "PAY" });
+                            }}
                         />
                     </View>
                 </Modal>

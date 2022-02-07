@@ -3,6 +3,7 @@ import { Text, View, TouchableOpacity, Image, TextInput, KeyboardAvoidingView, S
 import { connect } from 'react-redux';
 import LinearGradient from 'react-native-linear-gradient';
 import Animated, { useSharedValue, useAnimatedStyle, withTiming, Easing } from 'react-native-reanimated';
+import { getUniqueId } from 'react-native-device-info';
 
 // Styles
 import styles from './style';
@@ -54,9 +55,15 @@ const RegisterScreen = (props) => {
     const [tcErr, setTcErr] = useState("");
     const [tcFocus, setTcFocus] = useState(false);
 
+    const telRef = useRef(null);
+    const telInput = useSharedValue({ x: 16, y: 24, color: "#C0C0C0", back: "white" });
+    const [telEntry, setTelEntry] = useState("");
+    const [telErr, setTelErr] = useState("");
+    const [telFocus, setTelFocus] = useState(false);
+
     const [passwordVisible, setPasswordVisible] = useState(false);
 
-    const onContinue = () => {
+    const onContinue = async () => {
         if (emailEntry.length == 0) {
             setEmailErr("Lütfen email giriniz.");
             return;
@@ -97,8 +104,34 @@ const RegisterScreen = (props) => {
 
         setTcErr("");
 
-        props.navigation.navigate("ConfirmScreen", { type: "REGISTER" });
-        console.log("navigate");
+        const uid = getUniqueId();
+        const formData = new FormData();
+        const token = props.local.anon_token;
+        formData.append("uniqueDeviceID", uid);
+        formData.append("token", token);
+        formData.append("name", fullnameEntry);
+        formData.append("surname", " ");
+        formData.append("apiUsername", "neepay");
+        formData.append("apiPassword", "123456");
+        formData.append("email", emailEntry);
+        formData.append("password", passwordEntry);
+        formData.append("phone", telEntry);
+        formData.append("tckn", tcEntry);
+        console.log("formdata: ", formData);
+        const res = await fetch('https://api.neepay.co/authentication/register', {
+            method: 'POST',
+            mode: 'cors',
+            cache: 'no-cache',
+            body: formData
+        })
+            .then(response => response.json())
+            .catch(error => {
+                console.log("error with register: ", error);
+            });
+        console.log("res: ", res);
+
+        //props.navigation.navigate("ConfirmScreen", { type: "REGISTER" });
+        //console.log("navigate");
     }
 
     useEffect(() => {
@@ -150,6 +183,17 @@ const RegisterScreen = (props) => {
             }
         }
     }, [tcFocus]);
+
+    useEffect(() => {
+        if (telFocus) {
+            telInput.value = { ...telInput.value, x: -12, y: 20, color: "#FF4B12", back: "white" };
+        } else {
+            if (telEntry.length == 0) {
+                telInput.value = { ...telInput.value, x: 16, y: 40, color: "#C0C0C0", back: "transparent" };
+            }
+        }
+    }, [telFocus]);
+
 
     const emailStyles = useAnimatedStyle(() => {
         return {
@@ -243,6 +287,25 @@ const RegisterScreen = (props) => {
             color: tcInput.value.color,
             fontWeight: "600",
             backgroundColor: tcInput.value.back,
+        };
+    });
+
+    const telStyles = useAnimatedStyle(() => {
+        return {
+            top: withTiming(telInput.value.x, {
+                duration: 125,
+                easing: Easing.bezier(0.25, 0.1, 0.25, 1),
+            }),
+            zIndex: 20,
+            left: withTiming(telInput.value.y, {
+                duration: 125,
+                easing: Easing.bezier(0.25, 0.1, 0.25, 1),
+            }),
+            paddingLeft: 4,
+            paddingRight: 4,
+            color: telInput.value.color,
+            fontWeight: "600",
+            backgroundColor: telInput.value.back,
         };
     });
 
@@ -363,7 +426,7 @@ const RegisterScreen = (props) => {
                         <LinearGradient style={styles.border} colors={['#EC0000', '#D49900']} start={{ x: 0, y: 1 }} end={{ x: 1, y: -1 }} useAngle={true} angle={45} angleCenter={{ x: 0.5, y: 0.5 }} />
                     </View>
                     {passwordErr.length != 0 && <Text style={{ marginTop: 8, color: "#EC0000" }}>{password2Err}</Text>}
-                    <View style={{ ...styles.inputContainer, marginTop: 16, marginBottom: 32 }}>
+                    <View style={{ ...styles.inputContainer, marginTop: 16, }}>
                         <TouchableOpacity style={{ zIndex: 20 }} activeOpacity={1} onPress={() => tcRef.current.focus()}>
                             <Animated.Text style={[{ position: "absolute" }, tcStyles]}>
                                 T.C. Kimlik Numarası
@@ -386,8 +449,29 @@ const RegisterScreen = (props) => {
                         <LinearGradient style={styles.border} colors={['#EC0000', '#D49900']} start={{ x: 0, y: 1 }} end={{ x: 1, y: -1 }} useAngle={true} angle={45} angleCenter={{ x: 0.5, y: 0.5 }} />
                     </View>
                     {tcErr.length != 0 && <Text style={{ marginTop: 8, color: "#EC0000" }}>{tcErr}</Text>}
+                    <View style={{ ...styles.inputContainer, marginTop: 16, marginBottom: 32 }}>
+                        <TouchableOpacity style={{ zIndex: 20 }} activeOpacity={1} onPress={() => telRef.current.focus()}>
+                            <Animated.Text style={[{ position: "absolute" }, telStyles]}>
+                                Telefon Numarası
+                            </Animated.Text>
+                        </TouchableOpacity>
+                        <View style={{ position: "absolute", padding: 2, width: "100%", zIndex: 4, }}>
+                            <View style={{ flexDirection: "row", backgroundColor: "white", borderRadius: 6, alignItems: "center", overflow: "hidden", }}>
+                                <PhoneIcon width={24} height={24} fill="#DF3500" style={{ height: "100%", marginLeft: 10 }} />
+                                <TextInput
+                                    onChangeText={text => setTelEntry(text)}
+                                    style={styles.input}
+                                    ref={telRef}
+                                    onFocus={() => setTelFocus(true)}
+                                    onBlur={() => setTelFocus(false)}
+                                    keyboardType="number-pad"
+                                />
+                            </View>
+                        </View>
+                        <LinearGradient style={styles.border} colors={['#EC0000', '#D49900']} start={{ x: 0, y: 1 }} end={{ x: 1, y: -1 }} useAngle={true} angle={45} angleCenter={{ x: 0.5, y: 0.5 }} />
+                    </View>
+                    {telErr.length != 0 && <Text style={{ marginTop: 8, color: "#EC0000" }}>{telErr}</Text>}
                 </ScrollView>
-
                 <View style={{ justifyContent: "flex-end", paddingLeft: 24, paddingRight: 24, backgroundColor: "transparent" }}>
                     <Button
                         text="Devam Et"

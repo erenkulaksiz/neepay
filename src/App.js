@@ -6,7 +6,7 @@ import { persistStore } from 'redux-persist';
 import { Provider } from 'react-redux';
 import { NavigationContainer, createNavigationContainerRef } from '@react-navigation/native';
 import { createStackNavigator, TransitionPresets } from '@react-navigation/stack';
-
+import { getUniqueId } from 'react-native-device-info';
 // Utils
 import store from './store';
 
@@ -30,7 +30,36 @@ const App = (props) => {
     useEffect(() => {
         StatusBar.setBackgroundColor("#fff");
         StatusBar.setBarStyle('dark-content');
-        SplashScreen.hide();
+
+        setTimeout(async () => {
+            const token = await store.getState().local.anon_token
+            if (!token) {
+                const uid = await getUniqueId();
+                const formData = new FormData();
+                formData.append("uniqueDeviceID", uid);
+                const res = await fetch('https://api.neepay.co/authentication/anonymousLogin', {
+                    method: 'POST',
+                    mode: 'cors',
+                    cache: 'no-cache',
+                    body: formData
+                })
+                    .then(response => response.json())
+                    .catch(error => {
+                        alert("An error occurred.");
+                        console.log("error with reg: ", error)
+                    });
+                if (res.status == 100) {
+                    await store.dispatch({ type: "SET_LOCAL_TOKEN", payload: res.token });
+                    SplashScreen.hide();
+                } else {
+                    alert("An error occurred with register.");
+                }
+                console.log("res: ", res);
+            } else {
+                console.log("already found a token");
+                SplashScreen.hide();
+            }
+        }, 500);
     }, [])
 
     return (
@@ -38,7 +67,7 @@ const App = (props) => {
             <PersistGate loading={null} persistor={persistor}>
                 <NavigationContainer ref={navigationRef}>
                     <Stack.Navigator
-                        initialRouteName="RootScreen"
+                        initialRouteName="LandingScreen"
                         screenOptions={{
                             ...TransitionPresets.SlideFromRightIOS,
                             headerShown: false,

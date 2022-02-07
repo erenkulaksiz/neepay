@@ -19,13 +19,7 @@ import Button from '../../components/button';
 // Images/icons
 import ArrowRightIcon from '../../icons/arrow_right';
 import ArrowLeft from '../../icons/arrow_left';
-import NotificationsIcon from '../../icons/notifications';
-import InfoIcon from '../../icons/info';
-import MenuIcon from '../../icons/menu';
-import PayIcon from '../../icons/pay';
-import SendIcon from '../../icons/send';
 import LinkIcon from '../../icons/link';
-import SaveIcon from '../../icons/save';
 import CheckIcon from '../../icons/check';
 
 import LogoSm from '../../images/logo_sm.png';
@@ -46,6 +40,11 @@ const QRMakeScreen = (props) => {
     const generateQr = () => {
         setGenerated(true);
     }
+    useEffect(() => {
+
+        console.log("params: ", props.route.params);
+    }, []);
+
 
     return (
         <View style={{ flex: 1, backgroundColor: "white" }}>
@@ -54,6 +53,7 @@ const QRMakeScreen = (props) => {
                 onPageSelected={(e) => {
                     setQrPos(e.nativeEvent.position);
                 }}
+                scrollEnabled={props.route.params.type != "PAY"}
                 ref={pager}>
                 <View key="1">
                     <View style={{ width: "100%", height: 80, flexDirection: "row", backgroundColor: "white", zIndex: 2, borderBottomLeftRadius: 16, borderBottomRightRadius: 16, borderWidth: 1, borderStyle: "solid", borderColor: "#C0C0C0", borderTopWidth: 0, borderBottomWidth: 0 }}>
@@ -75,16 +75,23 @@ const QRMakeScreen = (props) => {
                         <QRCodeScanner
                             onRead={(e) => {
                                 console.log("edata: ", e.data);
+                                alert(props.route.params.type == "PAY" ? ("Ödemeniz gerçekleşti. " + e.data) : ("Para gönderimi gerçekleşti. " + e.data));
                             }}
                             flashMode={RNCamera.Constants.FlashMode.off}
                             containerStyle={{ width: "100%", height: "100%", position: "absolute", top: -14, }}
                             cameraStyle={{ height: "100%", width: "100%" }}
+                            reactivate={true}
+                            reactivateTimeout={5000}
+                            showMarker={false}
+                            markerStyle={{ borderColor: "white" }}
+                            permissionDialogTitle={"İzin Gerekli"}
+                            permissionDialogMessage={"QR Kod okumak için kamera erişimine ihtiyacımız var."}
+                            buttonPositive={"Tamam"}
                         />
 
                         <RNHoleView
-                            style={{ position: 'absolute', width: '100%', height: '100%', justifyContent: "center", alignItems: "center", backgroundColor: 'rgba(0,0,0,0.5)' }}
+                            style={{ position: 'absolute', width: '100%', height: '100%', top: -14, justifyContent: "center", alignItems: "center", backgroundColor: 'rgba(0,0,0,0.5)' }}
                             holes={[{ x: 60, y: 150, width: 240, height: 240, }]}>
-                            <Text>QR</Text>
                         </RNHoleView>
                         <Text style={{ position: "absolute", top: 50, color: "white", fontSize: 16, fontWeight: "bold" }}>Bir QR Kod Okutunuz</Text>
 
@@ -178,7 +185,7 @@ const QRMakeScreen = (props) => {
                     </View>}
                 </View>
             </PagerView>
-            <View style={{ width: "100%", height: 86, backgroundColor: "black", paddingHorizontal: 8, paddingVertical: 8 }}>
+            {props.route.params.type != "PAY" && <View style={{ width: "100%", height: 86, backgroundColor: "black", paddingHorizontal: 8, paddingVertical: 8 }}>
                 <View style={{ flex: 1, backgroundColor: "#D8D8D8", borderRadius: 9, padding: 8, flexDirection: "row" }}>
                     <TouchableOpacity style={{ flex: 50, justifyContent: "center", alignItems: "center" }} onPress={() => pager.current.setPage(0)}>
                         <Text style={{ fontSize: 16, color: "black", fontWeight: "600", zIndex: 2 }}>QR Oku</Text>
@@ -193,7 +200,7 @@ const QRMakeScreen = (props) => {
                     </TouchableOpacity>
 
                 </View>
-            </View>
+            </View>}
 
         </View>
     );

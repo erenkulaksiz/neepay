@@ -46,7 +46,7 @@ const LandingScreen = (props) => {
                                 </TouchableOpacity>
                             </View>
                             <View style={{ width: "100%", alignItems: "center", marginTop: 24, flexDirection: "row", justifyContent: "center" }}>
-                                <Text style={{ fontSize: 14 }}>neepay için</Text>
+                                <Text style={{ fontSize: 14, color: "gray" }}>neepay için</Text>
                                 <TouchableOpacity style={{ marginLeft: 4, flexDirection: "row", alignItems: "center" }}>
                                     <Text style={{ color: "#0094FF" }}>kullanım şartları</Text>
                                     <LinkIcon width={16} height={16} fill="#0094FF" style={{ marginLeft: 4 }} />

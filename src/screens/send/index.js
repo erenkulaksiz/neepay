@@ -34,7 +34,7 @@ const SendScreen = (props) => {
     const [fullnameFocus, setFullnameFocus] = useState(false);
 
     useEffect(() => {
-        fullnameRef.current.focus();
+
         console.log("params: ", props.route.params);
     }, []);
 
@@ -59,6 +59,19 @@ const SendScreen = (props) => {
     }, [fullnameFocus]);
 
     const onContinue = () => {
+        if (fullnameEntry.length == 0) {
+            alert("Lütfen bir miktar giriniz!");
+            return;
+        }
+        if (emailEntry.length == 0) {
+            if (props.route.params.type == "NO") {
+                alert("Lütfen bir müşteri numarası giriniz.");
+                return;
+            } else {
+                alert("Lütfen bir telefon numarası giriniz.");
+                return;
+            }
+        }
         props.navigation.reset({
             index: 0,
             routes: [{ name: 'Success' }],

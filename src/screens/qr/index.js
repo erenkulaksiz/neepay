@@ -57,12 +57,12 @@ const QRScreen = (props) => {
             </View>
             <View style={{ flex: 1, justifyContent: "center", alignItems: "center", }}>
                 <View style={{ position: "absolute", top: -100, }}>
-                    <TouchableOpacity onPress={() => props.navigation.navigate("QRMakeScreen")} style={{ width: 166, height: 166, borderColor: "#DCDCDC", justifyContent: "center", alignItems: "center", borderRadius: 17, borderStyle: "solid", borderWidth: 1, backgroundColor: "white", elevation: 12 }}>
+                    <TouchableOpacity onPress={() => props.navigation.navigate("QRMakeScreen", { type: "PAY" })} style={{ width: 166, height: 166, borderColor: "#DCDCDC", justifyContent: "center", alignItems: "center", borderRadius: 17, borderStyle: "solid", borderWidth: 1, backgroundColor: "white", elevation: 12 }}>
                         <PayIcon width={100} height={100} />
                         <Text style={{ color: "black", fontSize: 16, fontWeight: "bold" }}>Ödeme Yap</Text>
                         <Text style={{ color: "black", fontSize: 16, fontWeight: "bold" }}>Kolay ATM</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => props.navigation.navigate("QRMakeScreen")} style={{ width: 166, height: 166, marginTop: 24, justifyContent: "center", alignItems: "center", borderColor: "#DCDCDC", borderRadius: 17, borderStyle: "solid", borderWidth: 1, backgroundColor: "white", elevation: 12 }}>
+                    <TouchableOpacity onPress={() => props.navigation.navigate("QRMakeScreen", { type: "SENDPAY" })} style={{ width: 166, height: 166, marginTop: 24, justifyContent: "center", alignItems: "center", borderColor: "#DCDCDC", borderRadius: 17, borderStyle: "solid", borderWidth: 1, backgroundColor: "white", elevation: 12 }}>
                         <SendIcon width={100} height={100} />
                         <Text style={{ color: "black", fontSize: 16, fontWeight: "bold" }}>Para Gönder/Al</Text>
                     </TouchableOpacity>

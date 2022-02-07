@@ -3,6 +3,7 @@ import { Text, View, TouchableOpacity, Image, TextInput, KeyboardAvoidingView } 
 import { connect } from 'react-redux';
 import LinearGradient from 'react-native-linear-gradient';
 import Animated, { useSharedValue, useAnimatedStyle, withTiming, Easing } from 'react-native-reanimated';
+import { getUniqueId } from 'react-native-device-info';
 
 // Styles
 import styles from './style';
@@ -30,7 +31,7 @@ const LoginScreen = (props) => {
 
     const [isFocused, setIsFocused] = useState(false);
 
-    const onContinue = () => {
+    const onContinue = async () => {
         if (entry.length == 0) {
             setErr("Lütfen email veya telefon numarası giriniz.");
             return;
@@ -40,8 +41,29 @@ const LoginScreen = (props) => {
             setErr("Lütfen geçerli bir email giriniz.");
             return;
         }
+        const uid = getUniqueId();
+        const formData = new FormData();
+        const token = props.local.anon_token;
+        formData.append("uniqueDeviceID", uid);
+        formData.append("token", token);
+        formData.append("apiUsername", "neepay");
+        formData.append("apiPassword", 123456);
+        formData.append("username", entry);
+        formData.append("password", 123456);
+        console.log("formdata: ", formData);
+        const res = await fetch('https://api.neepay.co/authentication/login', {
+            method: 'POST',
+            mode: 'cors',
+            cache: 'no-cache',
+            body: formData
+        })
+            .then(response => response.json())
+            .catch(error => {
+                console.log("error with login: ", error);
+            });
+        console.log("res: ", res);
 
-        props.navigation.navigate("ConfirmScreen", { type: "LOGIN" });
+        //props.navigation.navigate("ConfirmScreen", { type: "LOGIN" });
     }
 
     useEffect(() => {
@@ -118,7 +140,7 @@ const LoginScreen = (props) => {
                                     ref={inputRef}
                                     onFocus={() => setIsFocused(true)}
                                     onBlur={() => setIsFocused(false)}
-                                    maxLength={32}
+                                    maxLength={entryType == "phone" ? 10 : 30}
                                 />
                             </View>
                         </View>

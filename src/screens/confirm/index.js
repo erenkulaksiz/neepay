@@ -37,7 +37,10 @@ const ConfirmScreen = (props) => {
         if (value.length == CELL_COUNT) {
             // next page
             if (value == "11111") {
-                alert("safdjhads");
+                props.navigation.reset({
+                    index: 0,
+                    routes: [{ name: 'RootScreen' }],
+                });
             }
         }
     }, [value]);
@@ -69,7 +72,7 @@ const ConfirmScreen = (props) => {
                             keyboardType="number-pad"
                             textContentType="oneTimeCode"
                             renderCell={({ index, symbol, isFocused }) => (
-                                <View style={{
+                                <View key={index} style={{
                                     justifyContent: "center", alignItems: "center", height: 60,
                                     borderRadius: 8,
                                     width: 40,
